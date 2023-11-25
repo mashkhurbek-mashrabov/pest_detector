@@ -2,12 +2,12 @@ train: ../train/images
 val: ../valid/images
 test: ../test/images
 
-nc: 2
-names: ['chivin', 'pashsha']
+nc: 1
+names: ['- -']
 
 roboflow:
   workspace: test-ksits
-  project: pest-detector-wwwlz
+  project: pest-detector-wsb3p
   version: 1
   license: CC BY 4.0
-  url: https://universe.roboflow.com/test-ksits/pest-detector-wwwlz/dataset/1
+  url: https://universe.roboflow.com/test-ksits/pest-detector-wsb3p/dataset/1
