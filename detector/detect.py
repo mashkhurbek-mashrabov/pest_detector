@@ -1,37 +1,48 @@
 from ultralytics import YOLO
-import cv2
+from PIL import ImageDraw, Image
+import io
+import os
+import uuid
 
-model = YOLO("runs/detect/train8/weights/best.pt")
+model = YOLO("../detector/best.pt")
 
-results = model.predict("fimmu-13-907088-g001.jpg")
 
-result = results[0]
+def pest_detector(image_data):
+    # Convert the image data bytes to a PIL Image object
+    image = Image.open(io.BytesIO(image_data))
 
-# Load the image
-image = cv2.imread("../detector/train/images/d9ef5e-1_jpg.rf.78f0ae0b4473c13f4ee5458fc217cc5e.jpg")
+    # Perform object detection on the image
+    results = model.predict(image)
 
-for box in result.boxes:
-    class_id = result.names[box.cls[0].item()]
-    cords = box.xyxy[0].tolist()
-    cords = [round(x) for x in cords]
-    conf = round(box.conf[0].item(), 2)
+    result = results[0]
 
-    # Extract coordinates
-    x_min, y_min, x_max, y_max = cords
+    result_dict = {}
 
-    # Draw bounding box
-    cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+    for box in result.boxes:
+        class_id = box.cls[0].item()
+        class_name = result.names[class_id]
+        cords = box.xyxy[0].tolist()
+        cords = [round(x) for x in cords]
+        conf = round(box.conf[0].item(), 2)
 
-    # Add label and confidence
-    label = f"{class_id} {conf}"
-    cv2.putText(image, label, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        obj_count = 1
 
-    print("Object type:", class_id)
-    print("Coordinates:", cords)
-    print("Probability:", conf)
-    print("---------------------")
+        exist_obj = result_dict.get(class_id)
+        if exist_obj:
+            exist_obj['count'] = exist_obj['count'] + 1
+        else:
+            result_dict.update({class_id: {"class_name": class_name, "count": obj_count}})
 
-# Display the image with bounding boxes
-cv2.imshow("Detected Objects", image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+        # Draw bounding boxes on the image
+        draw = ImageDraw.Draw(image)
+        draw.rectangle(cords, outline="red", width=3)
+        draw.text((cords[0], cords[1]), f"{class_name} {conf}", fill="red")
+
+    # Save the modified image
+    unique_filename = f"{str(uuid.uuid4())}.jpg"
+    saved_image_path = os.path.join("results/", unique_filename)  # Change this to your desired save path
+    image.save(saved_image_path)
+
+    print(result_dict)
+
+    return saved_image_path, result_dict

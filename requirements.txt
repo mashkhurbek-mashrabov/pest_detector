@@ -7,3 +7,4 @@ ultralytics==8.0.217
 django-redis==5.4.0
 redis==5.0.1
 celery==5.3.6
+pytelegramBotAPI==4.14.0
