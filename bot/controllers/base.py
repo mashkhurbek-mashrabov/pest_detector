@@ -23,9 +23,9 @@ class BaseController:
 
     def t(self, code, language=None):
         if language:
-            return messages.get(language).get(code)
+            return messages.get(code)
         if self.user.language:
-            return messages.get(self.user.language).get(code)
+            return messages.get(code)
         else:
             return code
 
