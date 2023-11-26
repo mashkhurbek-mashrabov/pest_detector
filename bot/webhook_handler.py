@@ -45,6 +45,7 @@ def callback_handler(message):
 @bot.message_handler(content_types=['photo'])
 def contact_handler(message):
     controller = BotController(message, bot)
+    controller.image_receiver()
 
 
 @bot.message_handler(func=lambda message: True, content_types=content_type_media)

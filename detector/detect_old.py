@@ -5,7 +5,9 @@ model = YOLO("best.pt")
 
 # image_path = "train/images/download_jpg.rf.09ea86daf304f9b5bf5fbe3e6c03a7e7.jpg"
 # image_path = "train/images/Acyrthosiphon-lactucae-129151_jpg.rf.f22487b4ed1848dd7b72a89ee2fa74f3.jpg"
-image_path = "train/images/Screenshot-2023-11-25-112646_png.rf.93a729dfb87840ef7c75be0b5f02a2b0.jpg"
+# image_path = "train/images/Screenshot-2023-11-25-112646_png.rf.93a729dfb87840ef7c75be0b5f02a2b0.jpg"
+# image_path = "train/images/images-13-_jpg.rf.11ed3b01cf7bf5e91dfcaae8c86a3981.jpg"
+image_path = "images (26).jpg"
 
 results = model.predict(image_path)
 
