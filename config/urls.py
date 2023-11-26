@@ -19,8 +19,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
+from ai_detector.views import report_receiver
+from bot.webhook_handler import webhook_handler
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('detect', report_receiver, name='detect'),
+    path('bot', webhook_handler),
 ]
 
 if settings.DEBUG:
